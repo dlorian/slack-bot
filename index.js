@@ -10,10 +10,20 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/greetings', (req, res) => {
+app.get('/greetings', (req, res) => {
   let text = req.body.text;
+  res.send("Hello world");
+});
 
-  res.send("Received it");
+app.post('/greetings', (req, res) => {
+    // Extract user and text
+    const regexp = /(<@.*?>) (.*)$/;
+    const match =  regexp.exec(req.body.text);
+    console.log(match);
+
+    const user = match[1];
+    const text = match[2];
+  res.send(`Hello ${user}, ${text}`);
 });
 
 const server = app.listen(port, () => {
